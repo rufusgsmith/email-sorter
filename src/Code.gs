@@ -41,7 +41,12 @@ function setup() {
 
 /** Labels new inbox emails (last 2 days). Older emails are left for backlog mode. */
 function run() {
-  withLock(() => processInbox({ query: inboxQuery() + ' newer_than:2d', batchSize: CONFIG.batchSize, mode: 'run', digest: true }));
+  withLock(() => processNewMail(Date.now() + TIME_LIMIT_MS));
+}
+
+/** Shared by run() and backlogRun(), so new mail isn't held up while a backlog holds the lock. */
+function processNewMail(deadline) {
+  return processInbox({ query: inboxQuery() + ' newer_than:2d', batchSize: CONFIG.batchSize, mode: 'run', digest: true, deadline });
 }
 
 /** Gmail search for inbox emails we haven't processed. Gmail search writes '/' and spaces in label names as '-'. */
@@ -50,12 +55,11 @@ function inboxQuery() {
 }
 
 /**
- * Classifies and labels up to batchSize threads matching query, stopping early near the time limit.
+ * Classifies and labels up to batchSize threads matching query, stopping early at `deadline` (ms timestamp).
  * A failed email is left unlabelled, so the next run picks it up again.
  * When digest is true, each email is added to the Emails tab for the next digest.
  */
-function processInbox({ query, batchSize, mode, digest }) {
-  const started = Date.now();
+function processInbox({ query, batchSize, mode, digest, deadline }) {
   const ids = getLabelIds();
   const stats = { processed: 0, byRule: 0, failed: 0, inputTokens: 0, outputTokens: 0, labels: {}, error: '' };
 
@@ -65,7 +69,7 @@ function processInbox({ query, batchSize, mode, digest }) {
     .filter((m) => !seen.has(m.threadId) && seen.add(m.threadId));
 
   for (const m of messages) {
-    if (Date.now() - started > TIME_LIMIT_MS) break;
+    if (Date.now() > deadline) break;
     try {
       const email = readEmail(m.id);
       const result = classifyEmail(email, stats);

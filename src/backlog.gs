@@ -12,11 +12,14 @@ function startBacklog() {
 
 function backlogRun() {
   withLock(() => {
+    const deadline = Date.now() + TIME_LIMIT_MS;
+    processNewMail(deadline); // new mail first: while the backlog holds the lock, run() gets skipped
     const stats = processInbox({
       query: inboxQuery() + ' older_than:2d',
       batchSize: CONFIG.backlogBatchSize,
       mode: 'backlog',
       digest: false,
+      deadline,
     });
     // Stop when nothing new was labelled: either the inbox is done, or every remaining email
     // keeps failing (see 'First error' in the Runs tab), which would otherwise retry forever.
