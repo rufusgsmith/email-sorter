@@ -137,8 +137,9 @@ At minimum, replace the example **`aboutMe`** with your own (see [Write your Abo
 ### 6. Run `setup()` and authorise
 
 1. In the editor, pick **`setup`** in the function dropdown and click **▶ Run**.
-2. Google asks you to authorise. Choose your account, and you'll see **"Google hasn't verified this app."** That's expected: it's your own script, not a published app. Click **Advanced → Go to email-sorter (unsafe) → Allow**.
-3. The log should end with `Setup done.` setup() has now:
+2. Google asks you to authorise. Choose your account, and you'll see **"Google hasn't verified this app."** That's expected: it's your own script, not a published app, so the developer named there is you. Click **Advanced → Go to email-sorter (unsafe)**.
+3. On the **"Select what email-sorter can access"** screen, tick **Select all**, then click **Continue**. All four permissions are needed (see the table below). If any are unticked, the script fails with a "required permissions" error.
+4. The log should end with `Setup done.` setup() has now:
    - checked your config and API key
    - created any missing labels (reusing ones that already exist with the same name)
    - added the **Runs** and **Emails** tabs to your Sheet
