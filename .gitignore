@@ -1,0 +1,6 @@
+# clasp: your real project ID and login tokens stay local
+.clasp.json
+.clasprc.json
+
+node_modules/
+.DS_Store
