@@ -170,7 +170,7 @@ That's it. The triggers now run on their own.
 
 ## Write your About me
 
-`aboutMe` in `config.gs` is the only thing the AI knows about you, and it decides what gets **⭐ Action**. The example in the file belongs to the author, so **replace it**. A good About me has:
+`aboutMe` in `config.gs` is the only thing the AI knows about you, and it decides what gets **⭐ Action**. The example in the file describes a made-up student, so **replace it**. A good About me has:
 
 1. **Who you are and what you're doing:** "I'm a final-year nursing student, job hunting, and I run a small Etsy shop."
 2. **Your tie-breaker:** "I'd rather see one unimportant email marked Action than miss an important one" (or the opposite).
@@ -179,6 +179,8 @@ That's it. The triggers now run on their own.
 5. **A default:** "When unsure, mark it as Action."
 
 Be concrete. "Emails from my landlord" works better than "important housing stuff". Run `dryRun()` after each change to check.
+
+**Keeping it private (clasp users with a public fork):** don't commit your About me. Put it in `src/config.local.gs`, which is gitignored, as `CONFIG.aboutMe = \`...\`;`. Apps Script loads that file after `config.gs`, so its values win, and `clasp push` still uploads it to your script.
 
 ---
 

@@ -4,3 +4,6 @@
 
 node_modules/
 .DS_Store
+
+# your personal settings (About me etc.), see config.gs
+src/config.local.gs
