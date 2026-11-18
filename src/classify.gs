@@ -98,8 +98,10 @@ function findPart(part, mimeType) {
   return null;
 }
 
+/** Apps Script's Gmail service may give body.data as a byte array or as a base64url string; handle both. */
 function decodePart(part) {
-  return Utilities.newBlob(Utilities.base64DecodeWebSafe(part.body.data)).getDataAsString();
+  const data = part.body.data;
+  return Utilities.newBlob(typeof data === 'string' ? Utilities.base64DecodeWebSafe(data) : data).getDataAsString();
 }
 
 function htmlToText(html) {

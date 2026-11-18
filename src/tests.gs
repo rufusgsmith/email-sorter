@@ -43,6 +43,7 @@ function selfTest() {
   eq(extractBody({ mimeType: 'multipart/mixed', parts: [{ mimeType: 'multipart/alternative',
     parts: [part('text/html', '<style>p{}</style><p>Hi &amp; bye</p>')] }] }), 'Hi & bye', 'nested HTML fallback');
   eq(extractBody({ mimeType: 'text/plain', body: { size: 0 } }, 'snippet'), 'snippet', 'snippet fallback');
+  eq(extractBody({ mimeType: 'text/plain', body: { data: [72, 105] } }), 'Hi', 'body given as bytes');
   eq(extractBody(part('text/plain', 'x'.repeat(5000))).length, BODY_CHARS, 'body cut to BODY_CHARS');
 
   // Digest: Action first, then highlight, then show; count labels collapsed; HTML escaped.
